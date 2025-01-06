@@ -5,7 +5,7 @@ return [
     'documentations' => [
         'default' => [
             'api' => [
-                'title' => 'Paycash API',
+                'title' => 'People API',
             ],
 
             'routes' => [
@@ -18,7 +18,7 @@ return [
                 /*
                  * Edit to include full URL in ui for assets
                  */
-                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', true),
+                'use_absolute_path' => env('L5_SWAGGER_USE_ABSOLUTE_PATH', false),
 
                 /*
                  * Edit to set path where swagger ui assets should be stored
@@ -86,7 +86,7 @@ return [
             /*
              * Absolute path to directory where to export views
              */
-            'views' => base_path('resources/views/vendor/l5-swagger'),
+            'views' => resource_path('views/vendor/l5-swagger'),
 
             /*
              * Edit to set the api's base path
@@ -99,6 +99,11 @@ return [
              * `scanOptions.exclude` overwrites this
              */
             'excludes' => [],
+
+            /*
+             * Edit to set path where swagger ui assets should be stored
+             */
+            'swagger_ui_assets_path' => env('L5_SWAGGER_UI_ASSETS_PATH', 'vendor/swagger-api/swagger-ui/dist/'),
         ],
 
         'scanOptions' => [

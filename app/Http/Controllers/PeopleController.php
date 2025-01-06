@@ -14,6 +14,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use App\Traits\ExceptionHandler;
 
+/**
+ * @OA\Info(
+ *     version="1.0.0",
+ *     title="API de Gestión de Personas",
+ *     description="API para gestionar información de personas"
+ * )
+ */
 class PeopleController extends Controller
 {
     use ExceptionHandler;
@@ -23,6 +30,32 @@ class PeopleController extends Controller
     ) {
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/people",
+     *     summary="Obtener lista de personas",
+     *     tags={"Personas"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Lista de personas obtenida exitosamente",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="data", type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer"),
+     *                     @OA\Property(property="first_name", type="string"),
+     *                     @OA\Property(property="last_name", type="string"),
+     *                     @OA\Property(property="email", type="string"),
+     *                     @OA\Property(property="phone", type="string", nullable=true),
+     *                     @OA\Property(property="birthdate", type="string", format="date", nullable=true),
+     *                     @OA\Property(property="address", type="string", nullable=true)
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function index(): JsonResponse
     {
         try {
@@ -34,6 +67,33 @@ class PeopleController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/people",
+     *     summary="Crear una nueva persona",
+     *     tags={"Personas"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"first_name","last_name","email"},
+     *             @OA\Property(property="first_name", type="string"),
+     *             @OA\Property(property="last_name", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="phone", type="string", nullable=true),
+     *             @OA\Property(property="birthdate", type="string", format="date", nullable=true),
+     *             @OA\Property(property="address", type="string", nullable=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Persona creada exitosamente"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación"
+     *     )
+     * )
+     */
     public function store(StorePersonRequest $request): JsonResponse
     {
         try {
@@ -60,6 +120,28 @@ class PeopleController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/people/{id}",
+     *     summary="Obtener una persona específica",
+     *     tags={"Personas"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de la persona",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Persona encontrada exitosamente"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Persona no encontrada"
+     *     )
+     * )
+     */
     public function show(int $id): JsonResponse
     {
         try {
@@ -79,6 +161,44 @@ class PeopleController extends Controller
         }
     }
 
+    /**
+     * @OA\Put(
+     *     path="/api/people/{id}",
+     *     summary="Actualizar una persona existente",
+     *     tags={"Personas"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de la persona",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"first_name","last_name","email"},
+     *             @OA\Property(property="first_name", type="string"),
+     *             @OA\Property(property="last_name", type="string"),
+     *             @OA\Property(property="email", type="string"),
+     *             @OA\Property(property="phone", type="string", nullable=true),
+     *             @OA\Property(property="birthdate", type="string", format="date", nullable=true),
+     *             @OA\Property(property="address", type="string", nullable=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Persona actualizada exitosamente"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Persona no encontrada"
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Error de validación"
+     *     )
+     * )
+     */
     public function update(UpdatePersonRequest $request, int $id): JsonResponse
     {
         try {
@@ -116,6 +236,28 @@ class PeopleController extends Controller
         }
     }
 
+    /**
+     * @OA\Delete(
+     *     path="/api/people/{id}",
+     *     summary="Eliminar una persona",
+     *     tags={"Personas"},
+     *     @OA\Parameter(
+     *         name="id",
+     *         in="path",
+     *         required=true,
+     *         description="ID de la persona",
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(
+     *         response=204,
+     *         description="Persona eliminada exitosamente"
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Persona no encontrada"
+     *     )
+     * )
+     */
     public function destroy(int $id): JsonResponse
     {
         try {
