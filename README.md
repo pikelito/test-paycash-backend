@@ -28,30 +28,19 @@ Este proyecto utiliza Laravel Sail para proporcionar un entorno de desarrollo ba
     cp .env.example .env
     ```
 
-4. **Configurar las variables de entorno:**
-
-    Edita el archivo `.env` y asegúrate de configurar las siguientes variables:
-
-    ```env
-    APP_PORT=8080
-    DB_DATABASE=people_api
-    DB_USERNAME=admin
-    DB_PASSWORD=admin123
-    ```
-
-5. **Iniciar los contenedores:**
+4. **Iniciar los contenedores:**
 
     ```bash
     ./vendor/bin/sail up -d
     ```
 
-6. **Generar la clave de la aplicación:**
+5. **Generar la clave de la aplicación:**
 
     ```bash
     ./vendor/bin/sail artisan key:generate
     ```
 
-7. **Ejecutar las migraciones:**
+6. **Ejecutar las migraciones:**
 
     ```bash
     ./vendor/bin/sail artisan migrate
@@ -59,7 +48,8 @@ Este proyecto utiliza Laravel Sail para proporcionar un entorno de desarrollo ba
 
 ## Acceso a la aplicación
 
--   **Aplicación Laravel:** [http://localhost:8080](http://localhost:8080)
+-   **Aplicación Laravel:** [http://localhost:8000](http://localhost:8000)
+-   **API Docs:** [http://localhost:8000/api/documentation](http://localhost:8000/api/documentation)
 
 ## Comandos útiles
 
