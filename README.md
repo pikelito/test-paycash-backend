@@ -1,5 +1,7 @@
 # Test Paycash con Docker
 
+Link de la url desplegada en AWS: https://f149udqwbb.execute-api.us-east-2.amazonaws.com/prod/api/
+
 Este proyecto utiliza Laravel Sail para proporcionar un entorno de desarrollo basado en Docker.
 
 ## Requisitos
