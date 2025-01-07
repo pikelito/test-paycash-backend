@@ -1,0 +1,61 @@
+service: people-api
+
+provider:
+  name: aws
+  region: us-east-2
+  runtime: provided.al2
+  stage: ${opt:stage, 'prod'}
+
+  vpc:
+    securityGroupIds:
+      - sg-0ea6bc0a1b0a983d3
+    subnetIds:
+      - subnet-0b560f1e91bd5352a
+      - subnet-058261fd83dbb5998
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - rds-db:connect
+          Resource: arn:aws:rds:${aws:region}:${aws:accountId}:db:*
+
+  environment:
+    APP_ENV: production
+    DB_CONNECTION: ${ssm:/people-api/DB_CONNECTION}
+    DB_HOST: ${ssm:/people-api/DB_HOST}
+    DB_PORT: ${ssm:/people-api/DB_PORT}
+    DB_DATABASE: ${ssm:/people-api/DB_DATABASE}
+    DB_USERNAME: ${ssm:/people-api/DB_USERNAME}
+    DB_PASSWORD: ${ssm:/people-api/DB_PASSWORD}
+
+plugins:
+  - ./vendor/bref/bref
+  - serverless-offline
+
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!tests/**"
+    - "!storage/logs/**"
+    - "!.git/**"
+
+functions:
+  api:
+    handler: public/index.php
+    timeout: 28
+    layers:
+      - ${bref:layer.php-82-fpm}
+    events:
+      - http:
+        path: /api/{proxy+}
+        method: ANY
+        cors: true
+
+  artisan:
+    handler: artisan
+    timeout: 120
+    layers:
+      - ${bref:layer.php-82}
+      - ${bref:layer.console}
