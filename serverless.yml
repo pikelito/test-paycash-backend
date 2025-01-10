@@ -8,10 +8,10 @@ provider:
 
   vpc:
     securityGroupIds:
-      - sg-0ea6bc0a1b0a983d3
+      - sg-05e398cb59137fefd
     subnetIds:
-      - subnet-0b560f1e91bd5352a
-      - subnet-058261fd83dbb5998
+      - subnet-06e9211b717e5a359
+      - subnet-0338c9602f36d2b3d
 
   iam:
     role:
@@ -20,6 +20,10 @@ provider:
           Action:
             - rds-db:connect
           Resource: arn:aws:rds:${aws:region}:${aws:accountId}:db:*
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource: "*"
 
   environment:
     APP_ENV: production
@@ -52,6 +56,16 @@ functions:
         path: /api/{proxy+}
         method: ANY
         cors: true
+    environment:
+      L5_SWAGGER_GENERATE_ALWAYS: ${ssm:/people-api/L5_SWAGGER_GENERATE_ALWAYS}
+      L5_SWAGGER_CONST_HOST: ${ssm:/people-api/L5_SWAGGER_CONST_HOST}
+      SWAGGER_GENERATE_ALWAYS: true
+      SWAGGER_CONST_HOST: ${self:custom.apiUrl}
+      APP_DEBUG: true
+      APP_STORAGE: /tmp
+      VIEW_COMPILED_PATH: /tmp/views
+      CACHE_DRIVER: array
+      LOG_CHANNEL: stderr
 
   artisan:
     handler: artisan
@@ -59,3 +73,6 @@ functions:
     layers:
       - ${bref:layer.php-82}
       - ${bref:layer.console}
+
+custom:
+  apiUrl: https://k6yxy5gbs5.execute-api.us-east-2.amazonaws.com/prod/api/
